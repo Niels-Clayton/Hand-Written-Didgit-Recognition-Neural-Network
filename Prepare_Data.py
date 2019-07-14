@@ -5,7 +5,7 @@ import urllib.request
 
 class PrepareData:
 
-    def __init__(self, path = 'Data/MINSTData/'):
+    def __init__(self, path='Data/MINSTData/'):
         self.data_path = path
         self.download_data()
         self.dataset = self.read_files()
