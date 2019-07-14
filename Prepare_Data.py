@@ -8,7 +8,7 @@ class PrepareData:
     def __init__(self, path = 'Data/MINSTData/'):
         self.data_path = path
         self.download_data()
-        self.dataset  = self.read_files()
+        self.dataset = self.read_files()
 
     # Convert 4 bytes of data into an integer
     @staticmethod
