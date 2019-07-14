@@ -1,4 +1,4 @@
 # Ignore folder names ".idea"
-.idea/
-
+/.idea/
+/Data/
 *.png
