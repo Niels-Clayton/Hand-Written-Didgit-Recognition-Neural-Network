@@ -112,4 +112,4 @@ class PrepareData:
 
 
 prepare = PrepareData()
-#prepare.store_data()
+prepare.store_data()
