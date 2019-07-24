@@ -112,4 +112,8 @@ class PrepareData:
 
 
 prepare = PrepareData()
+<<<<<<< HEAD
 prepare.store_data()
+=======
+prepare.store_data()
+>>>>>>> 1af398ba5542fe4be2f250d1d338ce8492df36d1
