@@ -1,5 +1,5 @@
-/.idea
-/Data
-/venv
-/.gitignore
-/README.md
+.idea/
+Data/
+venv/
+.gitignore
+README.md
