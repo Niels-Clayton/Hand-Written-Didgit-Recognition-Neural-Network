@@ -5,7 +5,7 @@ import urllib.request
 
 class PrepareData:
 
-    def __init__(self, path='Data/MINSTData/'):
+    def __init__(self, path='Data/'):
         self.data_path = path
         self.download_data()
         self.dataset = self.read_files()
@@ -20,13 +20,15 @@ class PrepareData:
         if not os.path.exists(self.data_path):
             os.makedirs(self.data_path)
 
-        urls = ['http://yann.lecun.com/exdb/mnist/train-images-idx3-ubyte.gz',  # URLS to download the MINST dataset from
+        urls = ['http://yann.lecun.com/exdb/mnist/train-images-idx3-ubyte.gz',
+                # URLS to download the MINST dataset from
                 'http://yann.lecun.com/exdb/mnist/train-labels-idx1-ubyte.gz',
                 'http://yann.lecun.com/exdb/mnist/t10k-images-idx3-ubyte.gz',
                 'http://yann.lecun.com/exdb/mnist/t10k-labels-idx1-ubyte.gz']
 
         for url in urls:
-            filename = url.split('/')[-1]  # Split the URL at the '/', and then store the last string in the filename variable
+            filename = url.split('/')[
+                -1]  # Split the URL at the '/', and then store the last string in the filename variable
 
             if os.path.exists(self.data_path + filename) or os.path.exists(self.data_path + filename.split('.')[0]):
                 print(filename, 'already exists')
@@ -67,50 +69,49 @@ class PrepareData:
             if file.endswith('ubyte'):  # If file in the directory belongs to the dataset
                 print('Parsing file: ', file)
 
-                with open(self.data_path+file, 'rb') as f_open:  # Open file in binary read mode
-                    data = f_open.read()
-                    file_type = self.__bytes_to_int(data[:4])  # File type specifies if the file is for images or lables
-                    data_length = self.__bytes_to_int(data[4:8])  # Total number of data entries
+                data = open(self.data_path + file, 'rb').read()  # Open file in binary read mode
+                file_type = self.__bytes_to_int(data[:4])  # File type specifies if the file is for images or lables
+                data_length = self.__bytes_to_int(data[4:8])  # Total number of data entries
 
-                    if file_type == 2051:  # File contains image data
-                        category = 'images'
-                        num_rows = self.__bytes_to_int(data[8:12])  # Number of rows of pixels in the image
-                        num_cols = self.__bytes_to_int(data[12:16])  # Number of cols of pixels in the image
+                if file_type == 2051:  # File contains image data
+                    category = 'images'
+                    num_rows = self.__bytes_to_int(data[8:12])  # Number of rows of pixels in the image
+                    num_cols = self.__bytes_to_int(data[12:16])  # Number of cols of pixels in the image
 
-                        parsed_data = numpy.frombuffer(data, dtype=numpy.uint8, offset=16)
-                        parsed_data = parsed_data.reshape(data_length, num_rows, num_cols)
+                    parsed_data = numpy.frombuffer(data, dtype=numpy.uint8, offset=16)
+                    parsed_data = parsed_data.reshape(data_length, num_rows, num_cols)
+                    # print(parsed_data[1])  # TODO
 
-                    elif(file_type == 2049):  # File contains lable data
-                        category = 'labels'
-                        parsed_data = numpy.frombuffer(data, dtype=numpy.uint8, offset=8)
-                        parsed_data = parsed_data.reshape(data_length)
+                elif (file_type == 2049):  # File contains lable data
+                    category = 'labels'
+                    parsed_data = numpy.frombuffer(data, dtype=numpy.uint8, offset=8)
 
-                    if(data_length == 10000):
-                        set = 'test'
+                if (data_length == 10000):
+                    set = 'test'
 
-                    elif(data_length == 60000):
-                        set = 'train'
+                elif (data_length == 60000):
+                    set = 'train'
 
-                    dataset[set+'_'+category] = parsed_data
+                dataset[set + '_' + category] = parsed_data
         return dataset
 
     # Parse the data within @dataset, storing it within the given directory in labeled files dependant on class
-    def store_data(self):
+    def store_data_as_image(self):
         sets = ['train', 'test']
         for set in sets:
-            images = self.dataset[set+'_images']
-            labels = self.dataset[set+'_labels']
+            images = self.dataset[set + '_images']
+            labels = self.dataset[set + '_labels']
             num_samples = images.shape[0]
             for index in range(num_samples):
                 # print(set,': ', index)
                 image = images[index]
                 label = labels[index]
-                if not os.path.exists(self.data_path+set+'/'+str(label)+'/'):
-                    os.makedirs(self.data_path+set+'/'+str(label)+'/')
-                filenumber = len(os.listdir(self.data_path+set+'/'+str(label)+'/'))
-                imsave(self.data_path+set+'/'+str(label)+'/%05d.png'%(filenumber), image)
+                if not os.path.exists(self.data_path + set + '/' + str(label) + '/'):
+                    os.makedirs(self.data_path + set + '/' + str(label) + '/')
+                filenumber = len(os.listdir(self.data_path + set + '/' + str(label) + '/'))
+                imsave(self.data_path + set + '/' + str(label) + '/%05d.png' % (filenumber), image)
 
 
 prepare = PrepareData()
-prepare.store_data()
+prepare.store_data_as_image()
 print("Data downloaded and parsed")
