@@ -57,7 +57,7 @@ class PrepareData:
             if file.endswith('gz'):
                 print('Removing ', file)
                 os.remove(self.data_path + file)
-        print('All Archives have been removed')
+        print('All Archives have been removed\n')
 
     # Store data within a dictionary
     def read_files(self):
@@ -65,7 +65,7 @@ class PrepareData:
         files = os.listdir(self.data_path)  # Directory for the download of the MINST dataset
         for file in files:
             if file.endswith('ubyte'):  # If file in the directory belongs to the dataset
-                print('\nReading file: ', file)
+                print('Parsing file: ', file)
 
                 with open(self.data_path+file, 'rb') as f_open:  # Open file in binary read mode
                     data = f_open.read()
@@ -102,7 +102,7 @@ class PrepareData:
             labels = self.dataset[set+'_labels']
             num_samples = images.shape[0]
             for index in range(num_samples):
-                print(set,': ', index)
+                # print(set,': ', index)
                 image = images[index]
                 label = labels[index]
                 if not os.path.exists(self.data_path+set+'/'+str(label)+'/'):
@@ -113,3 +113,4 @@ class PrepareData:
 
 prepare = PrepareData()
 prepare.store_data()
+print("Data downloaded and parsed")
