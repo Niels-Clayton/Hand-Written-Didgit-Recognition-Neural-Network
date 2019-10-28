@@ -20,8 +20,8 @@ class PrepareData:
         if not os.path.exists(self.data_path):
             os.makedirs(self.data_path)
 
+        # URLS to download the MINST dataset from
         urls = ['http://yann.lecun.com/exdb/mnist/train-images-idx3-ubyte.gz',
-                # URLS to download the MINST dataset from
                 'http://yann.lecun.com/exdb/mnist/train-labels-idx1-ubyte.gz',
                 'http://yann.lecun.com/exdb/mnist/t10k-images-idx3-ubyte.gz',
                 'http://yann.lecun.com/exdb/mnist/t10k-labels-idx1-ubyte.gz']
