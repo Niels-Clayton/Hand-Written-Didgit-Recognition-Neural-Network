@@ -1,5 +1,6 @@
 .idea/
 Data/
 Neural_Net_Interpreter/
+__pycache__/
 .gitignore
 README.md

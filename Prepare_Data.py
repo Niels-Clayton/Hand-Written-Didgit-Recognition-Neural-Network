@@ -3,7 +3,7 @@ from skimage.io import imsave
 import urllib.request
 
 
-class PrepareData:
+class Prepare_Data:
 
     def __init__(self, path='Data/'):
         self.data_path = path
@@ -28,7 +28,12 @@ class PrepareData:
             "test_images": self.dataset["test_images"],
             "test_labels": self.dataset["test_labels"]}
 
-    # Download the dataset from the MINST dataset
+    """
+    Download the dataset from the MINST dataset to the @path directory.
+    
+    If the files already exist, notify the user and pass. Then decompress the files
+    and delete the compressed files.
+    """
     def download_data(self):
         if not os.path.exists(self.data_path):
             os.makedirs(self.data_path)
