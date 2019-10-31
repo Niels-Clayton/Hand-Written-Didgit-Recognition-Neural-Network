@@ -1,6 +1,7 @@
 import os, codecs, numpy, gzip, shutil
 from skimage.io import imsave
 import urllib.request
+import numpy as np
 
 
 class Prepare_Data:
@@ -17,16 +18,28 @@ class Prepare_Data:
     # Return the training dataset
     @property
     def get_training(self):
+
+        labels = np.zeros((self.dataset["train_labels"].shape[0], 10), dtype=np.float64)
+        for i in range((self.dataset["train_labels"].shape[0])):
+            label = self.dataset["train_labels"][i]
+            labels[i][label] = 1
+
         return {
-            "train_images": self.dataset["train_images"],
-            "train_labels": self.dataset["train_labels"]}
+            "train_images": np.asarray(self.dataset["train_images"], dtype=np.float64),
+            "train_labels": np.asarray(labels, dtype=np.float64)}
 
     # Return the testing dataset
     @property
     def get_test(self):
+
+        labels = np.zeros((self.dataset["test_labels"].shape[0], 10), dtype=np.float64)
+        for i in range((self.dataset["test_labels"].shape[0])):
+            label = self.dataset["test_labels"][i]
+            labels[i][label] = 1
+
         return {
-            "test_images": self.dataset["test_images"],
-            "test_labels": self.dataset["test_labels"]}
+            "test_images": np.asarray(self.dataset["test_images"], dtype=np.float64),
+            "test_labels": np.asarray(labels, dtype=np.float64)}
 
     """
     Download the dataset from the MINST dataset to the @path directory.

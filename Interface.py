@@ -1,7 +1,7 @@
 import wx
 
 
-def yes_no_button(panel):
+def create_button(panel):
     yes_button = wx.Button(panel, wx.ID_YES)
     yes_button.Bind(wx.EVT_BUTTON, panel.on_yes_press)
 
@@ -18,7 +18,7 @@ def yes_no_button(panel):
 
 def panel_text(panel):
     my_text = wx.StaticText(panel, 0, style=wx.ALIGN_CENTER_HORIZONTAL)
-    font = wx.Font(12, wx.FONTFAMILY_MODERN, wx.NORMAL, wx.NORMAL)
+    font = wx.Font(12, wx.FONTFAMILY_TELETYPE, wx.NORMAL, wx.NORMAL)
     my_text.SetFont(font)
     my_text.SetLabel("Do you want to download the\ntraining dataset?")
 
@@ -31,11 +31,11 @@ class MyPanel(wx.Panel):
         super().__init__(frame)
 
         self.frame = frame
-        buttons = yes_no_button(self)
+        buttons = create_button(self)
         text = panel_text(self)
 
         main_sizer = wx.BoxSizer(wx.VERTICAL)
-        main_sizer.Add(text, 0, wx.ALL | wx.CENTER, 30)
+        main_sizer.Add(text, 0, wx.TOP | wx.LEFT | wx.RIGHT | wx.CENTER, 10)
         main_sizer.Add(buttons, 0, wx.ALL | wx.CENTER, 10)
         self.SetSizer(main_sizer)
         self.Fit()
