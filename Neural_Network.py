@@ -1,5 +1,6 @@
 import numpy as np
 import scipy.special as sci
+import os
 
 
 class NeuralNet:
@@ -10,7 +11,7 @@ class NeuralNet:
         self.lr = 0.1
 
         self.input_size = training_set.shape[1]
-        self.hidden_layer_size = (28*28)
+        self.hidden_layer_size = 38
         self.output_layer_size = 10
 
         self.hidden_weights_1 = 2 * np.random.random((self.input_size, self.hidden_layer_size)) - 1
@@ -31,16 +32,16 @@ class NeuralNet:
     @staticmethod
     def sigmoid(x, derivative=False):
         if derivative:
-            # return (x*(1-x))
-            return 1/(1+(sci.expit(-x))) * (1 - 1/(1+(sci.expit(-x))))
-        return 1/(1+(sci.expit(-x)))
+            return sci.expit(x) * (1 - sci.expit(x))
+
+        return sci.expit(x)
 
     def forward_propagate(self, X):
         self.layer_1_output = self.sigmoid(np.dot(X, self.hidden_weights_1))
         self.output = self.sigmoid(np.dot(self.layer_1_output, self.output_weights))
 
     def calculate_error(self):
-        self.output_error = self.correct_output - self.output
+        self.output_error = (self.correct_output - self.output)
         self.total_error = np.mean(np.abs(self.output_error))
 
     def back_propagate(self, input, answer):
@@ -62,45 +63,30 @@ class NeuralNet:
         self.output_weights += self.lr * np.dot(np.transpose(self.layer_1_output), self.output_delta)
         self.hidden_weights_1 += self.lr * np.dot(np.transpose(input), self.layer_1_delta)
 
-
     def train(self):
         pos = np.random.randint(self.inputs.shape[0] - 10)
         self.back_propagate(self.inputs[pos:pos + 10], self.answers[pos:pos + 10])
         count = 0
 
-        while self.total_error > 1e-5:
+        while self.total_error > 1e-4:
             if count % 1000 == 0:
-                print(self.answers[pos:pos+3])
-                print(self.output[0:3])
-                print()
-                count = 0
+                print(np.mean(np.abs(self.output_error)))
+
+            if count > 1000000:
+                break
+
             pos = np.random.randint(self.inputs.shape[0]-10)
             self.back_propagate(self.inputs[pos:pos+10], self.answers[pos:pos+10])
             count += 1
 
+    def save_training(self, dir, file_name):
+        if not os.path.exists(dir):
+            os.makedirs(dir)
 
+        if os.path.exists(dir + '/' + file_name + '.npz'):
+            print(file_name + " already exists\n")
+            print("Please enter a new file name:    ")
+            file_name = input()
 
-
-
-# def sigmoid(x, deriv=False):
-#     if deriv:
-#         return x * (1 - x)
-#
-#     return 1 / (1 + (np.exp(-x)))
-#
-# # inputs for testing
-# X = np.array([[0., 0., 1.],
-#               [0., 1., 1.]])
-#
-# # outputs for testing
-# Y = np.array([[0., 1.],
-#               [1., 0.]])
-#
-#
-# weight1 = 2*np.random.random((3, 4))-1
-# weight2 = 2*np.random.random((4, 2))-1
-# weight3 = 2*np.random.random((2, 1))-1
-#
-# memes = sigmoid(np.dot(X, weight1))
-# memes2 = sigmoid(np.dot(memes, weight2))
-# memes3 = sigmoid(np.dot(memes2, weight3))
+        save_path = dir + '/' + file_name
+        np.savez(save_path, hidden=self.hidden_weights_1, output=self.output_weights)

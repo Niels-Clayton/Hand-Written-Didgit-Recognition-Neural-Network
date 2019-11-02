@@ -131,6 +131,7 @@ class Prepare_Data:
     def store_data_as_image(self):
         sets = ['train', 'test']
         for set in sets:
+            print(self.dataset.keys())
             images = self.dataset[set + '_images']
             labels = self.dataset[set + '_labels']
             num_samples = images.shape[0]
