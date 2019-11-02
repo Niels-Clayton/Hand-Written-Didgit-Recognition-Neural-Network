@@ -1,19 +1,7 @@
 from Prepare_Data import *
 from Interface import *
 from Neural_Network import *
-import numpy as np
 
-
-def output(x):
-    max = 0
-    pos = None
-    for i in range(x.shape[0]):
-        if x[i] > max:
-            max = x[i]
-            pos = i
-    answer = np.zeros(10)
-    answer[pos] = 1
-    return answer
 
 if __name__ == '__main__':
 
@@ -46,6 +34,6 @@ if __name__ == '__main__':
     while True:
         pos = int(input())
         nn.forward_propagate(X_test[pos:pos+1])
-        print(output(nn.output[0]))
+        print(nn.net_output(nn.output[0]))
         print(Y_test[pos])
         print()

@@ -28,13 +28,25 @@ class NeuralNet:
         self.output_error = None
         self.output_delta = None
 
-
     @staticmethod
     def sigmoid(x, derivative=False):
         if derivative:
-            return sci.expit(x) * (1 - sci.expit(x))
+            # return sci.expit(x) * (1 - sci.expit(x))
+            return x * (1-x)
 
         return sci.expit(x)
+
+    @staticmethod
+    def net_output(x):
+        max_val = 0
+        pos = None
+        for i in range(x.shape[0]):
+            if x[i] > max_val:
+                max_val = x[i]
+                pos = i
+        answer = np.zeros(10, dtype=np.float)
+        answer[pos] = 1
+        return answer
 
     def forward_propagate(self, X):
         self.layer_1_output = self.sigmoid(np.dot(X, self.hidden_weights_1))
