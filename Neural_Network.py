@@ -84,7 +84,7 @@ class NeuralNet:
             if count % 1000 == 0:
                 print(np.mean(np.abs(self.output_error)))
 
-            if count > 1000000:
+            if count > 10000000:
                 break
 
             pos = np.random.randint(self.inputs.shape[0]-10)
@@ -95,10 +95,21 @@ class NeuralNet:
         if not os.path.exists(dir):
             os.makedirs(dir)
 
-        if os.path.exists(dir + '/' + file_name + '.npz'):
+        if os.path.exists(dir + file_name + '.npz'):
             print(file_name + " already exists\n")
             print("Please enter a new file name:    ")
             file_name = input()
 
         save_path = dir + '/' + file_name
         np.savez(save_path, hidden=self.hidden_weights_1, output=self.output_weights)
+
+    def load_training(self, dir, file_name):
+        file_path = dir + file_name + '.npz'
+        if not os.path.exists(file_path):
+            print("This file does not exist.")
+            return
+        saved = np.load(file_path)
+        self.hidden_weights_1 = saved['hidden']
+        self.output_weights = saved['output']
+        saved.close()
+        return

@@ -28,8 +28,8 @@ if __name__ == '__main__':
 
     nn = NeuralNet(X, Y)
     nn.train()
-    print("training complete:\n input test index: \n")
-    # nn.save_training('Saved_Training', 'test')
+    nn.save_training('Saved_Training/', 'test')
+    # nn.load_training('Saved_Training/', 'training')
 
     while True:
         pos = int(input())
