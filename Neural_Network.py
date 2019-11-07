@@ -4,15 +4,15 @@ import os
 
 
 class NeuralNet:
-    def __init__(self, training_set, answer_set):
+    def __init__(self, input_size, hidden_size, output_size, learning_rate=0.1):
 
-        self.inputs = training_set
-        self.answers = answer_set
-        self.lr = 0.1
+        self.inputs = None
+        self.answers = None
+        self.lr = learning_rate
 
-        self.input_size = training_set.shape[1]
-        self.hidden_layer_size = 38
-        self.output_layer_size = 10
+        self.input_size = input_size
+        self.hidden_layer_size = hidden_size
+        self.output_layer_size = output_size
 
         self.hidden_weights_1 = 2 * np.random.random((self.input_size, self.hidden_layer_size)) - 1
         self.output_weights = 2 * np.random.random((self.hidden_layer_size, self.output_layer_size)) - 1
@@ -31,8 +31,8 @@ class NeuralNet:
     @staticmethod
     def sigmoid(x, derivative=False):
         if derivative:
-            # return sci.expit(x) * (1 - sci.expit(x))
-            return x * (1-x)
+            return sci.expit(x) * (1 - sci.expit(x))
+            #return x * (1-x)
 
         return sci.expit(x)
 
@@ -75,7 +75,9 @@ class NeuralNet:
         self.output_weights += self.lr * np.dot(np.transpose(self.layer_1_output), self.output_delta)
         self.hidden_weights_1 += self.lr * np.dot(np.transpose(input), self.layer_1_delta)
 
-    def train(self):
+    def train(self, inputs, outputs):
+        self.inputs = inputs
+        self.answers = outputs
         pos = np.random.randint(self.inputs.shape[0] - 10)
         self.back_propagate(self.inputs[pos:pos + 10], self.answers[pos:pos + 10])
         count = 0

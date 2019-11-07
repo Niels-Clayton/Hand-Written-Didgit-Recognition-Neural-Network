@@ -26,9 +26,9 @@ if __name__ == '__main__':
     Y = train['train_labels']
     Y_test = test['test_labels']
 
-    nn = NeuralNet(X, Y)
-    nn.train()
-    nn.save_training('Saved_Training/', 'test')
+    nn = NeuralNet(28*28, 32, 10)
+    nn.train(X, Y)
+    # nn.save_training('Saved_Training/', 'test')
     # nn.load_training('Saved_Training/', 'training')
 
     while True:
